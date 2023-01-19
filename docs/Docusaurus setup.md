@@ -4,11 +4,9 @@ sidebar_position: 2
 
 # Docusaurus Site Setup
 
-## [GitHub Link](https://github.com/biohackerellie/portfolio-site/tree/main/docs)
+## [GitHub Link](https://github.com/biohackerellie/docs)
 
 Built using Node.js with [Docusaurus 2](https://docusaurus.io/).
-
-Use the [Reference Guides](./Reference%20Guides/) folder for helpful guides on Markdown, as well as specifics for editing this site.
 
 ---
 
@@ -21,7 +19,7 @@ Use the [Reference Guides](./Reference%20Guides/) folder for helpful guides on M
 *works with PS, Bash, gitbash, etc*
 ```bash
  cd /your/working/directory
- git clone https://github.com/Laurel-Public-Schools/links.git
+ git clone https://github.com/biohackerellie/docs.git
 ```
 Install node modules
 ```bash
