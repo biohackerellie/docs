@@ -53,6 +53,11 @@ const config = {
             label: 'Docs',
           },
           {
+            href: 'https://epklabs.com',
+            label: 'Back to main site',
+            position: 'right',
+          },
+          {
             href: 'https://github.com/biohackerellie',
             label: 'GitHub',
             position: 'right',

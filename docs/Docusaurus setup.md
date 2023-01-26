@@ -23,7 +23,7 @@ Built using Node.js with [Docusaurus 2](https://docusaurus.io/).
 ```
 Install node modules
 ```bash
-cd /links
+cd /docs
 npm install
 ```
 ### Start the app
