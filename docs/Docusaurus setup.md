@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Docusaurus Site Setup
+# Documentation Site Setup
 
 ## [GitHub Link](https://github.com/biohackerellie/docs)
 
@@ -62,7 +62,7 @@ docker run --rm --name <container-name> -p 3000:3000 -d <image-name>:latest
 
 You will be able to open the static web content at http://localhost:3000
 
-Any time updates are made to your site and are ready for live deployment, simply rebuild and run the image. *this can be done automatically on git push's via github actions or webooks*
+Any time updates are made to your site and are ready for live deployment, simply rebuild and run the image. *this can be done automatically on git pushes via github actions or webooks*
 
 
 Built by [@biohackerellie](https://www.github.com/biohackerellie)
