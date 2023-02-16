@@ -31,8 +31,8 @@ services:
       - "3100:3100"
     restart: unless-stopped
     command: -config.file=/etc/loki/loki-config.yml
-    networks:
-      - loki
+    #networks:
+      #- loki
   promtail:
     image: grafana/promtail:2.4.0
     volumes:
@@ -42,8 +42,8 @@ services:
     #   - "1514:1514" # this is only needed if you are going to send syslogs
     restart: unless-stopped
     command: -config.file=/etc/promtail/promtail-config.yml
-    networks:
-      - loki
+    #networks:
+      #- loki
   grafana:
     image: grafana/grafana:latest
     user: "1000"
@@ -52,12 +52,9 @@ services:
     ports:
       - "4269:3000"
     restart: unless-stopped
-    networks:
-      - loki
-volumes:
-  loki:
-  grafana:
-  promtail:
+    #networks:
+      #- loki
+
 ```
 **Loki Config File:**
 
