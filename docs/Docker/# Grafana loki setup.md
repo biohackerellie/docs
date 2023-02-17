@@ -31,19 +31,19 @@ services:
       - "3100:3100"
     restart: unless-stopped
     command: -config.file=/etc/loki/loki-config.yml
-    #networks:
-      #- loki
+    networks:
+      - loki
   promtail:
     image: grafana/promtail:2.4.0
     volumes:
       - /var/log:/var/log
       - /etc/promtail:/etc/promtail
-    # ports:
-    #   - "1514:1514" # this is only needed if you are going to send syslogs
+     ports:
+      - "1514:1514" # this is only needed if you are going to send syslogs
     restart: unless-stopped
     command: -config.file=/etc/promtail/promtail-config.yml
-    #networks:
-      #- loki
+    networks:
+      - loki
   grafana:
     image: grafana/grafana:latest
     user: "1000"
@@ -52,8 +52,8 @@ services:
     ports:
       - "4269:3000"
     restart: unless-stopped
-    #networks:
-      #- loki
+    networks:
+      - loki
 
 ```
 **Loki Config File:**
@@ -76,7 +76,7 @@ common:
       rules_directory: /tmp/loki/rules
   replication_factor: 1
   ring:
-    instance_addr: 127.0.0.1
+    instance_addr: 10.50.99.81
     kvstore:
       store: inmemory
 
@@ -91,7 +91,7 @@ schema_config:
         period: 24h
 
 ruler:
-  alertmanager_url: http://localhost:9093
+  alertmanager_url: http://10.50.99.81:9093
 ```
 **Promtail Config File:**
 
@@ -107,7 +107,7 @@ positions:
   filename: /tmp/positions.yaml
 
 clients:
-  - url: http://loki:3100/loki/api/v1/push
+  - url: http://10.50.99.81:3100/loki/api/v1/push
 
 scrape_configs:
 
@@ -135,7 +135,7 @@ static_configs:
 
 - job_name: syslog
 syslog:
-  listen_address: 0.0.0.0:1514 # make sure you also expose this port on the container
+  listen_address: 10.50.99.81:1514 # make sure you also expose this port on the container
   idle_timeout: 60s
   label_structured_data: yes
   labels:
