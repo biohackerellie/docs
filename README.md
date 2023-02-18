@@ -1,5 +1,5 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/biohackerellie/docs/badge)](https://www.codefactor.io/repository/github/biohackerellie/docs)
-
+[![Docker Image CI](https://github.com/biohackerellie/docs/actions/workflows/docker-image.yml/badge.svg)](https://github.com/biohackerellie/docs/actions/workflows/docker-image.yml)
 # Docusaurus Site Setup
 
 
