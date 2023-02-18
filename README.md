@@ -1,4 +1,4 @@
-
+[![CodeFactor](https://www.codefactor.io/repository/github/biohackerellie/docs/badge)](https://www.codefactor.io/repository/github/biohackerellie/docs)
 
 # Docusaurus Site Setup
 
