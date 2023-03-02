@@ -17,5 +17,5 @@ if [ "$(git rev-parse HEAD)" != "$(git rev-parse @{u})" ]; then
     #rebuild the image from Dockerfile
     docker build -t docs:latest . && \
     #Restart container with new image
-    docker run --rm --name docs -p 3030:3000 -d docs:latest
+    docker run --rm --name docs -p 3000:3000 -d docs:latest
 fi
