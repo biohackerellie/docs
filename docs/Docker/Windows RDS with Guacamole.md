@@ -1,4 +1,4 @@
-#Windows RDS with Guacamole and Azure SAML
+# Windows RDS with Guacamole and Azure SAML
 
 For the school district I work for, I was tasked with coming up with creating a proof of concept for using Windows Remote Desktop Services as a means to cut down on computer labs and allowing students to access Windows based software from their chromebooks.
 
