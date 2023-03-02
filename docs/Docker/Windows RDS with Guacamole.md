@@ -8,7 +8,7 @@ Though there is plenty of documentation provided by Microsoft on RDS, and plenty
 
 ## Windows Server Host
 
-Before setting up Guacamole that we use as a gateway to access Windows, we need to set up the host server that users will connect to. For our initial setup, all we need is a Virtual Machine running windows server 2022 and we've given it 20gb of ram and 8vCPUs. This can and will be expanded as needed. On the Windows server, you will need to install the Windows RDS session host role, and create a new session. More documentation on this can be found [here](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds-roles). Right now, this host can hold 30-60 concurrent users, to expand beyond that user base, we can simply replicate the VM and load balance it in Guacamole.
+Before setting up Guacamole that we use as a gateway to access Windows, we need to set up the host server that users will connect to. For our initial setup, all we need is a Virtual Machine running windows server 2022 and we've given it 20gb of ram and 8vCPUs. This can and will be expanded as needed. On the Windows server, you will need to install the Windows RDS connecttion broker and session host role, and create a new session. If you plan to scale to more than 1 host, it's recommended to also have the connection broker on its own server vm. More documentation on this can be found [here](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds-roles). Right now, this host can hold 30-60 concurrent users, to expand beyond that user base, we can simply replicate the VM and load balance it in Guacamole.
 
 ## Installing Guacamole Docker Image
 
@@ -29,7 +29,7 @@ More information on CF tunnels can be found [here](https://developers.cloudflare
 
 ## Guacamole Setup
 ### Setup a local admin account
-Once you've got the container made, a default admin user has automatically been created, the username and password are both `guacadmin`. Once you have logged into guacamole, go to the settings and add a new local admin user with all of the admin rights, then log into the new account and delete `guacadmin`. 
+Once you've got the container made, a default admin user has automatically been created, the username and password are both `guacadmin`. You can access the Guacamole dashboard either from the proxy address you set up, or he ip and port of the container `http://<your.container.ip>.com:8080`. Once you have logged into guacamole, go to the settings and add a new local admin user with all of the admin rights, then log into the new account and delete `guacadmin`. 
 
 ### Add RDS host
 Next, go to the connections tab to configure the connection to the Windows host we set up earlier.
