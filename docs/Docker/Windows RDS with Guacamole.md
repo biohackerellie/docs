@@ -1,14 +1,14 @@
 # Windows RDS with Guacamole and Azure SAML
 
-For the school district I work for, I was tasked with coming up with creating a proof of concept for using Windows Remote Desktop Services as a means to cut down on computer labs and allowing students to access Windows based software from their chromebooks.
+For the school district I work for, I was tasked with coming up with a proof of concept for using Windows Remote Desktop Services as a means to cut down on computer labs and allowing students to access Windows based software from their chromebooks.
 
 From the start, I wanted to keep it entirely on prem vs using Azure cloud or any such service. I decided on using Apache's Guacamole as a web based RDP gateway, because it operates incredibly smoothly on chromebooks will keeping resource needs low on the back end. 
 
-Though there is plenty of documentation provided by Microsoft on RDS, and plenty of documentation for Guacamole, it took quite a lot of tinkering to actually merge the concepts to work for a large userbase, and I wanted to provide some insight and documentation so others can learn from and expand upon this concept.
+Though there is plenty of documentation provided by Microsoft on RDS, and plenty of documentation for Guacamole, it took quite a lot of tinkering to actually merge the concepts to work for a large user base, and I wanted to provide some insight and documentation so others can learn from and expand upon this concept.
 
 ## Windows Server Host
 
-Before setting up Guacamole that we use as a gateway to access Windows, we need to set up the host server that users will connect to. For our initial setup, all we need is a Virtual Machine running windows server 2022 and we've given it 20gb of ram and 8vCPUs. This can and will be expanded as needed. On the Windows server, you will need to install the Windows RDS connecttion broker and session host role, and create a new session. If you plan to scale to more than 1 host, it's recommended to also have the connection broker on its own server vm. More documentation on this can be found [here](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds-roles). Right now, this host can hold 30-60 concurrent users, to expand beyond that user base, we can simply replicate the VM and load balance it in Guacamole.
+Before setting up Guacamole that we use as a gateway to access Windows, we need to set up the host server that users will connect to. For our initial setup, all we need is a Virtual Machine running windows server 2022 and we've given it 20gb of ram and 8vCPUs. This can and will be expanded as needed. On the Windows server, you will need to install the Windows RDS connection broker and session host role, and create a new session. If you plan to scale to more than 1 host, it's recommended to also have the connection broker on its own server vm. More documentation on this can be found [here](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/rds-roles). Right now, this host can hold 30-60 concurrent users, to expand beyond that user base, we can simply replicate the VM and load balance it in Guacamole.
 
 ## Installing Guacamole Docker Image
 
@@ -34,7 +34,7 @@ Once you've got the container made, a default admin user has automatically been 
 ### Add RDS host
 Next, go to the connections tab to configure the connection to the Windows host we set up earlier.
 1. Click `New Connection`
-2. Name the host and set the protocal to RDP
+2. Name the host and set the protocol to RDP
 3. Scroll down to the `Parameters` tab, and under `Network` set the hostname to the IP address of the windows server
 4. Under `Authentication`, set the username to `${GUAC_USERNAME}`. This will automatically pass through the username of the current logged in user to the host you're connecting to.
 5. Leave `Password` blank, add your domain name into the `Domain` field
@@ -45,7 +45,7 @@ Next, go to the connections tab to configure the connection to the Windows host 
 
 
 ### Groups
-We will want to set up at least 2 groups. A non privlaged (what will be our default group) and an admin group. Start by going to the Groups tab. 
+We will want to set up at least 2 groups. A non privileged (what will be our default group) and an admin group. Start by going to the Groups tab. 
 1. Click `New Group` and choose a name. This is our default group, and we named it `Students`.
 2. For the Student group, under `Permissions` leave everything unchecked, for the admin group, check every box.
 3. Scroll down to connections, and check the box next to the Host we added earlier. 
@@ -57,13 +57,13 @@ When only one connection is selected for a non admin group, upon authenticating 
 
 ## Azure SAML Config
 ### Setup in Azure Portal
-An enteprise app needs to be configured in Azure.
+An enterprise app needs to be configured in Azure.
 1. In Azure AD, under the `Enterprise Applications` tab, click `create new` then `create your own application`.
 2. Name it, and select the `Non-gallery` Option. Set as single tenant.
 3. Once the app is created and you're on the app page, go to the `Single sign-on `tab and edit the basic SAML Config
 4. Set both the Identifier (Entity ID) and Reply URL to your custom domain that you set up with the reverse proxy.
-5. Edit `Attributes & Claimes`, Edit the Required claim, Unique User Identifier. Set the identifier format to `Persistent` Source to `Attribute` and the attribute to ` user.onpremisessamaccountname`. This passes in the first part of a users email to guacamole as the username.
-6. Under SAML Certificates, downlaod the Federation Metadata XML, you will need to add that into the `/config` folder of the Docker container we set up earlier. 
+5. Edit `Attributes & Claims`, Edit the Required claim, Unique User Identifier. Set the identifier format to `Persistent` Source to `Attribute` and the attribute to ` user.onpremisessamaccountname`. This passes in the first part of a users email to guacamole as the username.
+6. Under SAML Certificates, download the Federation Metadata XML, you will need to add that into the `/config` folder of the Docker container we set up earlier. 
 7. Take note of the `Login URL`, we will need that later. 
 
 ### Edit Guacamole.Properties File
@@ -98,12 +98,12 @@ Now users should be able to login with with their domain accounts to guacamole. 
 ### Automatic Group assignment
 Though on the surface it appears guacamole can identify groups sent from azure, the functionality does not appear to work properly, at least with this current docker image. So instead, we need to script this function into the sql database. 
  
-First, we will want to write the script and save it as a `.sql` file so that it can be run again if needed. There are a set of scripts that start up the database in the mounted container config folder, `/path/to/confic/guacamole/schema`, so we will add it there. From a terminal or VScode, create the `default-groups.sql` file in the `/schema` folder and add the following:
+First, we will want to write the script and save it as a `.sql` file so that it can be run again if needed. There are a set of scripts that start up the database in the mounted container config folder, `/path/to/config/guacamole/schema`, so we will add it there. From a terminal or VScode, create the `default-groups.sql` file in the `/schema` folder and add the following:
 
 ```sql
 -- Define Group
 CREATE OR REPLACE FUNCTION add_to_default_group() RETURNS TRIGGER AS $$
--- Define function action, inserting a new entiy(user) id next to group 1 (our default group)
+-- Define function action, inserting a new entity(user) id next to group 1 (our default group)
 BEGIN
     INSERT INTO guacamole_user_group_member (user_group_id, member_entity_id)
     VALUES (1, NEW.entity_id);
@@ -146,6 +146,6 @@ psql -U <user> -d <guacdatabase> -a -f /config/schema/default-groups.sql
 ```
 ## All done
 
-After all of that, Guacamole should now be up and running with authentication setup through azure and automatic group assignemnts in the sql database! 
+After all of that, Guacamole should now be up and running with authentication setup through azure and automatic group assignments in the sql database! 
 
 
