@@ -15,6 +15,7 @@ if [ "$(git rev-parse HEAD)" != "$(git rev-parse @{u})" ]; then
     if docker container inspect $CONTAINER_NAME >/dev/null 2>&1; then
         echo "$CONTAINER_NAME is running, shutting down" && \
         docker container stop $CONAINER_NAME \
+
     fi
     docker stop $CONAINER_NAME && \
     #rebuild the image from Dockerfile
