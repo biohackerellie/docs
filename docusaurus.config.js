@@ -9,7 +9,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const config = {
   title: 'My Documentation',
   tagline: 'Documentation for my Repositories',
-  url: 'https://epklabs.com/',
+  url: 'https://docs.epklabs.com/',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
