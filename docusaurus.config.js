@@ -54,7 +54,7 @@ const config = {
           },
           {
             href: 'https://epklabs.com',
-            label: 'Back to main site',
+            label: 'epklabs.com',
             position: 'right',
           },
           {
