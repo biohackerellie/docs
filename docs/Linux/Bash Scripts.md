@@ -1,4 +1,14 @@
+# Bash scripts and commands
+Useful scripts and commands I use all the time
 ## Docker
+
+### Delete unused files
+
+```bash 
+sudo docker system prune -f
+```
+
+
 
 ### Docker Container CI Script
 This is a script used for Continuous Inegration builds, like this site, using GH repos. The script checks for discrepencies between the repository on the host server running the site and the remote GH repo, and if there are updates it pulls them locally. Then it builds a new image based on those updates, stops the previously running container, and starts a new container with the updated image. Since the new image is built before the script is told to shutdown the container, if there are any errors in the updated code, the script will fail and your app should continue running as expected. 
