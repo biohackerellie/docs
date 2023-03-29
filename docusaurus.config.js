@@ -13,7 +13,7 @@ const config = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: '../public/favicon.png',
+  favicon: 'img/favicon.ico',
 
   i18n: {
     defaultLocale: 'en',
@@ -44,15 +44,24 @@ const config = {
         disableSwitch: true,
         respectPrefersColorScheme: false,
       },
+			docs: {
+				sidebar: {
+					hideable: true,
+				}
+			},
       navbar: {
         title: 'Ellie Kerns Documentation',
+				logo: {
+					alt: 'EPK logo',
+					src: 'img/translogo.png',
+				},
         items: [
-          {
-            type: 'doc',
-            docId: 'Home',
-            position: 'left',
-            label: 'Docs',
-          },
+          // {
+          //   type: 'doc',
+          //   docId: 'Home',
+          //   position: 'left',
+          //   label: 'Docs',
+          // },
           {
             href: 'https://epklabs.com',
             label: 'epklabs.com',
