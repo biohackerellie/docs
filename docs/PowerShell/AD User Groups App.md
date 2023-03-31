@@ -60,7 +60,9 @@ You must have the Active Directory PowerShell Module installed to run the script
 :::
 
 ## Code
+
 ```Powershell
+
 # Simple WinForm for adding user to security building.
 ## This app is specifically for assigning door access
 
@@ -225,4 +227,5 @@ $form.Controls.Add($getGroupsButton)
 
 # Display form
 $result = $form.ShowDialog()
+
 ```
