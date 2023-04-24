@@ -10,7 +10,7 @@
 
 ### Installation
 
-To get started , clone the repo to your local machine then install the dependancies: 
+To get started , clone the repo to your local machine then install the dependencies: 
 ```bash
 cd react-terminal
 npm install
