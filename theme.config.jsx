@@ -3,10 +3,10 @@ import Image from 'next/image';
 
 const config = {
 	project: {
-		link: 'https://github.com/biohackerellie/EPKLabs/Docs',
+		link: 'https://github.com/biohackerellie/docs',
 	},
 	logo: <strong>EPKLabs Documentation</strong>,
-	docsRepositoryBase: 'https://github.com/biohackerellie/EPKLabs/Docs',
+	docsRepositoryBase: 'https://github.com/biohackerellie/docs',
 	primaryHue: 201,
 	darkMode: false,
 	logo: (
