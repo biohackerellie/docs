@@ -1,14 +1,15 @@
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 const config = {
 	project: {
 		link: 'https://github.com/biohackerellie/docs',
 	},
 	logo: <strong>EPKLabs Documentation</strong>,
-	docsRepositoryBase: 'https://github.com/biohackerellie/docs',
+	docsRepositoryBase: 'https://github.com/biohackerellie/docs/tree/main',
 	primaryHue: 201,
-	darkMode: false,
+	darkMode: true,
 	logo: (
 		<>
 			<Image
@@ -23,6 +24,11 @@ const config = {
 			</span>
 		</>
 	),
+	useNextSeoProps() {
+		return {
+			titleTemplate: '%s - EPKLabs Docs',
+		};
+	},
 	footer: {
 		text: (
 			<span>
