@@ -1,5 +1,16 @@
 {
-	"index": "Home",
-	"Resume": "Resume",
-	"Docker-Projects": "Docker-Projects"
+	"*": {
+		"type": "page"
+	},
+	"index": {
+		"title": "Home",
+		"type": "page"
+	},
+	"BunMail": {
+		"title": "BunMail",
+		"type": "page"
+	},
+	"Projects": {
+		"title": "Other Projects"
+	}
 }
