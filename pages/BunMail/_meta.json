@@ -1,11 +1,8 @@
 {
 	"index": {
-		"title": "Getting Started",
-		"theme": {
-			"typesetting": "article"
-		}
+		"title": "Getting Started"
 	},
-	"Setup": "Installation",
+	"Setup": "Configuring your server",
 	"methods": {
 		"title": "Sending Emails"
 	}

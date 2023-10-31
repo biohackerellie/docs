@@ -1,3 +1,5 @@
 {
-	"WithDocker": "With Docker"
+	"Email": "Email Settings",
+	"WithDocker": "Install With Docker",
+	"WithoutDocker": "Install Without Docker"
 }

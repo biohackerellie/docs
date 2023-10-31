@@ -4,4 +4,9 @@ const withNextra = require('nextra')({
 	themeConfig: './theme.config.jsx',
 });
 
-module.exports = withNextra();
+(module.exports = withNextra()),
+	{
+		pageExtensions: ['mdx', 'md', 'jsx', 'js', 'ts', 'tsx'],
+
+		reactStrictMode: false,
+	};
