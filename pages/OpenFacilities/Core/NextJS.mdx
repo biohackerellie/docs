@@ -1,0 +1,86 @@
+import AppTree from '../../../components/AppTree';
+
+# Using NextJS App Router
+
+## Why NextJS?
+
+This project started development just weeks after Vercel released NextJS 13.4 which introduced the App Router. The App Router is a new way to handle routing in NextJS apps. It allows you to create a single page app (SPA) experience without having to use a client-side router like React Router. This is a huge win for developers because it means we can now build SPAs without having to worry about SEO or page load times.
+
+This project was also not only my first real full stack production project, but also my first time using NextJS. I had been wanting to learn NextJS for a while and this project was the perfect opportunity to do so.
+
+## How App Router Works
+
+### File Structure
+
+The app router is what's known as a file-based router. This means, unlike concepts from React-Router or Vue-Router, you don't have to manually define routes with a router file or component, but instead, Next uses a predetermined file structure to determine what routes to create.
+
+Take a look at the file structure for Open-Facilities:
+
+<AppTree />
+
+NextJS uses a standard file naming convention within the app directory to define routes. At the root of the app directory, you must define a layout.tsx/jsx file and a page.tsx/jsx file. this will define your '/' root path of your app. Then, sub directories within /app will be nested routes with in your app, as long as they at least contain a page file. For example, the /app/facilities directory contains a page.tsx file, so it will be a nested route within the app and found at http://localhost.com/facilities.
+
+layout files define the shape and well obviously the layout of your app. Components or styles applied from the layout file will be past to any nested pages or layouts beneath it by passing in the React node children. Not every nested route needs a layout however, because it will naturally inherit the layout of its parent route. But adding a layout within a route like facilities, will apply layout styles and components only to the facilities route and its children. Here is an example of the root layout file for Open-Facilities:
+
+```tsx filename="app/layout.tsx"
+export default function RootLayout({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	return (
+		<html
+			lang='en'
+			suppressHydrationWarning={true}
+			className={GeistSans.className}
+		>
+			<body>
+				<AuthProvider>
+					<ThemeProviders
+						attribute='class'
+						defaultTheme='system'
+						enableSystem
+						disableTransitionOnChange
+					>
+						<Navbar />
+
+						{children}
+						<Footer />
+						<Toaster />
+					</ThemeProviders>
+					<SpeedInsights />
+					<Analytics />
+				</AuthProvider>
+			</body>
+		</html>
+	);
+}
+```
+
+by applying certain components to the root layout like the Navbar, we can ensure that the Navbar will be applied to every page in the app. This is a great way to ensure that certain components are always present in your app, like a navbar or footer.
+
+### API Routes
+
+NextJS also has a built in API route handler. This is a great way to handle server side logic without having to create a separate server. This is especially useful for handling authentication and database logic. Here is an example of an API route from Open-Facilities:
+
+```tsx filename="app/api/facilities/[id]/route.tsx"
+import { NextResponse } from 'next/server';
+
+import { serializeJSON } from '@/utils/serializeJSON';
+import { FacilityQuery } from '@/lib/db/queries/facility';
+
+export async function GET(
+	request: Request,
+	{ params }: { params: { id: number } }
+) {
+	const id = Number(params.id);
+	const res = await FacilityQuery.execute({ id: id });
+	return NextResponse.json(serializeJSON(res));
+}
+```
+
+This api route exports a standard HTTP GET method, meaining we can call whatever logic we put within this function, will be callable from a http request to this route either within the app itself or from an external source at http://localhost:3000/api/facilities/[id] Note that this route is dynamic, meaning we can pass in a parameter to the route, in this case an id, and it will be available to us within the GET function as a params object. This is a great way to handle dynamic data fetching from a database. In this case, we are using the id parameter to query the database for a specific facility and return it as JSON so the route http://localhost:3000/api/facilities/1 will return a JSON object of the facility with an id of 1.
+
+## NextJS Docs
+
+There is a ton of concepts that really go into making a NextJS app, and I just wanted to scratch the service and explain a little of the project outline here to those who may be unfamiliar with NextJS. If you want to learn more about NextJS, I highly recommend checking out their docs at https://nextjs.org/docs/getting-started. They have a ton of great resources and tutorials to help you get started with NextJS.

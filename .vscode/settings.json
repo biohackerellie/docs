@@ -1,0 +1,35 @@
+{
+	"editor.cursorBlinking": "phase",
+
+	"workbench.colorTheme": "Alex's Dark Theme",
+
+	"editor.cursorSmoothCaretAnimation": "on",
+
+	"editor.cursorSurroundingLinesStyle": "all",
+
+	"editor.smoothScrolling": true,
+
+	"workbench.list.smoothScrolling": true,
+
+	"terminal.integrated.smoothScrolling": true,
+
+	"editor.fontFamily": "FiraCode Nerd Font Mono",
+
+	"editor.tabSize": 2,
+
+	"editor.wordWrap": "on",
+
+	"editor.acceptSuggestionOnCommitCharacter": false,
+
+	"editor.linkedEditing": true,
+
+	"editor.mouseWheelZoom": true,
+
+	"editor.fontLigatures": true,
+
+	"[python]": {
+		"editor.insertSpaces": true,
+
+		"editor.tabSize": 4
+	}
+}

@@ -1,0 +1,100 @@
+import { Callout } from 'nextra/components';
+
+# Drizzle
+
+## What is Drizzle?
+
+Drizzle ORM, or Object Relational Mapper, is a tool that allows us to query our database directly in our codebase while providing end to end type safety and validation with TypeScript. There are many ORMs out there, and they often abstract a lot away from the base SQL queries you try to write, but Drizzle keeps the syntax as close to SQL as possible, hell you can even write raw SQL queries if you want to.
+
+## The Schema
+
+The schema is the most important part of Drizzle, it is what allows us to define our database structure in our codebase while giving type definitions to all of our database models. The schema is defined in a `lib/db/schema.ts` file, and it is a simple object that contains all of our tables and their columns.
+
+```ts filename="lib/db/schema.ts"
+// this is an example of the Facility table, and how we define it in the schema
+export const Facility = facilities_db.table(
+	'Facility',
+	{
+		id: bigserial('id', { mode: 'number' }).primaryKey().notNull(),
+		name: varchar('name', { length: 191 }).notNull(),
+		building: varchar('building', { length: 191 }).notNull(),
+		address: varchar('address', { length: 191 }).notNull(),
+		imagePath: varchar('imagePath', { length: 191 }),
+		capacity: integer('capacity'),
+		createdAt: timestamp('createdAt', {
+			precision: 3,
+			withTimezone: true,
+			mode: 'string',
+		}).defaultNow(),
+		updatedAt: timestamp('updatedAt', {
+			precision: 3,
+			withTimezone: true,
+			mode: 'string',
+		}),
+		googleCalendarId: varchar('googleCalendarId', { length: 191 }).notNull(),
+	},
+	(table) => {
+		return {
+			idx_30107_Facility_name_key: uniqueIndex(
+				'idx_30107_Facility_name_key'
+			).on(table.name),
+			idx_30107_Facility_calendarId_key: uniqueIndex(
+				'idx_30107_Facility_calendarId_key'
+			).on(table.googleCalendarId),
+		};
+	}
+);
+```
+
+<Callout
+	type='warning'
+	emoji='⚠️'
+>
+	Note that this example is from our database which is designed with postgres
+	and supabase in mind. Unless you plan to follow our exact database structure,
+	you will need to adjust the schema to fit your needs.
+</Callout>
+
+## Querying the Database
+
+Throughout the codebase, in both api routes and server actions, you will find drizzle queries to fetch or mutate data for the application.
+
+For fetching, we often use a method provided by drizzle called a prepared statement. Take a look at the following query:
+
+```ts filename="lib/db/queries/facilities.ts"
+import { db } from '@/lib/db';
+import { Facility, Reservation, Events } from '@/lib/db/schema';
+import { eq, and, gte, or, sql, like } from 'drizzle-orm';
+
+const today = new Date().toISOString();
+
+export const FacilityQuery = db.query.Facility.findFirst({
+	where: eq(Facility.id, sql.placeholder('id')),
+	with: {
+		Category: true,
+		Reservation: true,
+		Events: {
+			where: and(gte(Events.start, today), or(gte(Events.end, today))),
+		},
+	},
+}).prepare('single_Facility');
+```
+
+The query function is structured like most common queries that can be executed with drizzle, but we end the function with a `.prepare` method. This allows drizzle to save the and reuse the precompiled binary SQL which can increase speeds on queries that are called often. The name of the prepared statement is `single_Facility`, and it can be called with the following code:
+
+```ts filename="pages/api/facilities/[id].ts"
+import { FacilityQuery } from '@/lib/db/queries/facilities';
+
+export async function GET(
+	request: Request,
+	{ params }: { params: { id: number } }
+) {
+	const id = Number(params.id);
+	const res = await FacilityQuery.execute({ id: id });
+	return NextResponse.json(serializeJSON(res));
+}
+```
+
+Prepared statements only work for fetching information, they do not work for data mutations.
+
+For more on all the possiblites with drizzle, as well as how to set it up for any type of database, go to https://orm.drizzle.team/docs.
