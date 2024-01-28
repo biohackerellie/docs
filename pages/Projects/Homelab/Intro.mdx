@@ -1,0 +1,37 @@
+# My Homelab Setup
+
+## Why Have a Homelab
+
+Why have a homelab? Cuz you're a nerd obviously! And having a homelab server / servers is the pinocle of nerdiness.
+Having a homelab also allows you to host a plethera of services previously thought to only be available on the wide internet and accessible to anyone, and often locked behind a paywall.
+Having a homelab also allows you to learn new things, and experiment with new technologies, and even old technologies that you may not have had the chance to work with before.
+
+## My Homelab Setup
+
+### The Hardware
+
+We'll get into the details of my homelab setup in a bit, but first I want to talk about the hardware I'm using. I snagged a used commercial grade server, a HP proliant DL360 gen 7 specifically, on amazon for around $100. It came with 2x 2.4GHz quad core Xeon processors, 32GB of RAM, and 4x 146GB SAS Drives, and I added a 150GB SSD. I also have an old hp poweredge desktop for around the same cost, with 4 4tb drives and 16GB of ram thats being used as my NAS, and a Unifi Express for my router / firewall. Thats the hardware I'm using, but you can use whatever you want, and you can even use a VM on your desktop if you want to get started with a homelab, so let's get into the software.
+
+### The Software
+
+The HP Proliant server, which we'll call the main server from now on, is running Proxmox, which is a hypervisor based on Debian Linux. We'll discuss the details of how to setup Proxmox and the virtual machines in the proxmox section. Proxmox is the base layer on which I run all of my virtual machines. There are many other ways to setup a home lab, like VMWare, KVM, XCP, or just running a single linux instance, but for the rest of this guide, I'll be using Proxmox.
+
+On Proxmox, the primary VM base image I use is Ubunter server 22.04, which is the latest LTS version of Ubuntu server. I use Ubuntu server because it's the most popular linux server distro, and has the most support and documentation. I also use Ubuntu server because it's what I'm most familiar with, and I'm most comfortable with it. You can use whatever linux distro you want, but I'll be using Ubuntu server for the rest of this guide.
+
+I spin up new VMs based on the type of services I intend to run. I have one almost entirely for Jellyfin / Plex. Another for my web server which hosts all public facing applications I usually create myself but there are some other services on there as well, and another for services that help me `ahem` `ahem` obtain media for my media server.
+
+The majority of services I host in my homelab run on Docker. Docker is a containerization technology that allows you to run applications in a container, which is a lightweight virtual machine. Docker containers are much more lightweight than virtual machines, and are much easier to manage. So essentially each docker container is a lightweight virtual machine that runs a single application. I'll go into more detail on how to setup docker and docker containers in the docker section.
+
+The rest of this guide will be specifically related to setting up the media server, either Plex or Jellyfin, and the services that help me obtain media for my media server. I'll also cover a bit about the networking, as setting up a VPN is a must for this setup as wall as my NAS solution for storage.
+
+The apps we will be setting up are:
+
+- Proxmox
+- Ubuntu Server
+- Plex or Jellyfin
+- Sonarr
+- Radarr
+- Prowlarr
+- Deluge
+- Homepage
+- Dockge

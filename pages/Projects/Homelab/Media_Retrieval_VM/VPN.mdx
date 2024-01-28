@@ -1,0 +1,70 @@
+# VPN
+
+As I said in the intro, I manage my VPN through my firewall, so im a little less familur with this method, but from what I understand, if you want to run the VPN from the server itself, you can do so pretty easily.
+
+Because there are numerous vpn companies out there, I won't write a guide for each one, I will show my network config in the network section. But I do recommend Nord VPN, and their guide to installing their VPN on Ubuntu can be found
+[here](https://support.nordvpn.com/Connectivity/Linux/1325531132/Installing-and-using-NordVPN-on-Debian-Ubuntu-Raspberry-Pi-Elementary-OS-and-Linux-Mint.htm)
+
+I also wrote a handy script that checks if you are connected to the VPN, and if not, it will disconnect you from the internet. This is useful if you are using a VPN that doesn't have a killswitch.
+
+First, after you've got the vpn running, you can verify that your VM is on a seperate public IP than your home public IP by running the command `curl ifconfig.io` in your terminal. If you are connected to the VPN, you should see the IP of the VPN server, and not your home IP. You can check your home IP by going to [ifconfig.io](https://ifconfig.io) in your browser.
+
+Next create the script file by connecting to your media retrieval vm via ssh or the proxmox terminal and typing
+
+```bash
+sudo nano /usr/local/bin/vpncheck.sh
+```
+
+Then copy and paste the following into the file
+
+```bash copy
+#!/bin/bash
+
+# Get the current public IP address
+current_ip=$(curl -s ifconfig.io)
+
+# Your home IP address
+home_ip="Your home IP address here"
+
+# Check if the current IP address is the same as your home IP
+if [[ "$current_ip" == "$home_ip" ]]; then
+  # If they're the same, disconnect the network
+  echo "Home IP detected. Disconnecting the network..."
+
+  # Assuming you are using NetworkManager
+  # List all connections
+  conn_list=$(nmcli -t -f name con show --active)
+
+  # Disconnect each active connection
+  for conn in $conn_list
+  do
+    nmcli con down id "$conn"
+  done
+else
+  echo "Current IP is not home IP. Nothing to do."
+fi
+```
+
+Then save the file by pressing `ctrl + x` and then `y` and then `enter`
+
+Next, make the file executable by typing
+
+```bash
+sudo chmod +x /usr/local/bin/vpncheck.sh
+```
+
+Then, open your crontab by typing
+
+```bash
+sudo crontab -e
+```
+
+And add the following line to the bottom of the file
+
+```bash
+*/5 * * * * /usr/local/bin/vpncheck.sh
+```
+
+Then save the file by pressing `ctrl + x` and then `y` and then `enter`
+
+This will run the script every 5 minutes, and if it detects that you are not connected to the VPN, it will disconnect you from the internet.

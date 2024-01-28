@@ -1,0 +1,8 @@
+{
+	"Intro": "Intro",
+	"Proxmox": "Proxmox",
+	"UbuntuServer": "Ubuntu Server",
+	"Docker": "Docker",
+	"Primary_VM": "Primary VM",
+	"Media_Retrieval_VM": "Media Retrieval VM"
+}

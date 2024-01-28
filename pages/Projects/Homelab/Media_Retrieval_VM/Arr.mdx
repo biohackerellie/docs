@@ -1,0 +1,120 @@
+import { Callout } from 'nextra/components';
+
+# The Arr Suite
+
+The Arr Suite is a collection of docker containers that work together to provide a complete media downloading solution. This collection of containers remains the same regardless if you're using Plex or Jellyfin, so we will use
+one compose file to install all of these apps. The apps we're installing are:
+
+- Prowlarr - Indexes torrent files from various sites
+- Radarr - downloads movies found by Prowlarr and organizes them into your library and pulls metadata, artwork, and subtitles
+- Sonarr - downloads tv shows and anime found by Prowlarr and organizes them into your library and pulls metadata, artwork, and subtitles
+- Deluge - Torrent Downloader
+- Overseer/Jellyseer - A netflix style dashboard for searching for movies and shows to download
+
+<Callout
+	type='error'
+	emoji='️🚫'
+>
+	{' '}
+	If you use these apps without a VPN, you will likely get a DMCA notice. Do so at
+	your own risk!!!
+</Callout>
+
+## Installation
+
+In Dockge click on the `+Compose` button
+
+Name the stack Arr and make sure the Dockge Agent is on the secondary, media retrieval, ip and in the top textbox on the right, delete everything inside and paste in the following, with any changes you need to make to the ports and paths:
+
+<Callout type='info'>
+	note: the only thing you will likely need to change is jellyseer or overseer.
+	just comment out one or the other by adding a # in front of the line you don't
+	want to use. Jellyseer is for Jellyfin and Overseer is for Plex. Overseer will
+	be commented out by default.
+</Callout>
+
+```yaml
+version: '2.1'
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Denver
+    volumes:
+      - /mnt/server/tv:/tv
+      - /mnt/server/anime:/anime #optional
+      - /mnt/server/downloads:/downloads #optional
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Denver
+    volumes:
+      - /mnt/server/movies:/movies #optional
+      - /mnt/server/downloads:/downloads #optional
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Denver
+    volumes:
+      - /mnt/server/downloads:/downloads
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  deluge:
+    image: lscr.io/linuxserver/deluge:latest
+    container_name: deluge
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Denver
+      - DELUGE_LOGLEVEL=error #optional
+    volumes:
+      - /mnt/server/downloads:/downloads
+    ports:
+      - 8112:8112
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+		version: "2.1"
+
+	jellyseerr:
+			image: fallenbagel/jellyseerr:latest
+			container_name: jellyseerr
+			environment:
+					- LOG_LEVEL=debug
+					- TZ=America/Denver
+			ports:
+					- 5055:5055
+			restart: unless-stopped
+#  overseerr:
+#    image: lscr.io/linuxserver/overseerr:latest
+#    container_name: overseerr
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - TZ=America/Denver
+#
+#    ports:
+#      - 5055:5055
+#    restart: unless-stopped
+```
+
+Once you have made the changes you need, click the `Deploy` button and wait for it to finish.
