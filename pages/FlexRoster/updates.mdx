@@ -1,0 +1,61 @@
+import { Callout } from 'nextra/components';
+
+# Updates
+
+## 10/08/2024
+
+### New Features
+
+<Callout type='success'>
+	Setting your availability is now easier than ever!
+</Callout>
+- Updated the availability button to take you to a new page instead of the clunky
+drop-down menu. ![Availability](https://github.com/biohackerellie/images/blob/main/apps/flexroster/availUpdate.png?raw=true)
+* The new Page displays a calendar. Your days you have set available will be highlighted.
+![Availability2](https://github.com/biohackerellie/images/blob/main/apps/flexroster/availability1.png?raw=true)
+* You can click on days to toggle them on or off. Changes are saved to your schedule
+only when you click the save button at the bottom right of the page. ![Availability3](https://github.com/biohackerellie/images/blob/main/apps/flexroster/Availability2.png?raw=true)
+
+### Bug Fixes
+
+- Fixed an issue causing teachers to not be emailed when a student was transferred by another teacher.
+- Fixed an issue where some requests were not showing up on the requests page.
+
+## 10/04/2024
+
+- Fixed an issue where teachers weren't being notified when a student was transferred out of their classroom.
+- Allowed sorting by first or last name on the teacher dashboard.
+- Set the default sort method to Last name.
+- Set the default page size to 30.
+- Students who transfer to a new classroom will still be visible on their original teacher's dashboard.
+- Added the details column to the teacher dashboard.
+
+## 10/03/2024
+
+- Fixed an issue where some users weren't able to update their availability.
+
+## 10/02/2024
+
+- Added the ability for staff members who did not have an existing classroom to create a new classroom.
+  ![CreateClassroom](https://github.com/biohackerellie/images/blob/main/apps/flexroster/CreateClassroom.png?raw=true)
+  This will appear in place of the class roster from the teacher dashboard.
+  <Callout type='info'>
+  	By default, FlexRoster classrooms are generated from existing classes in the
+  	infinite campus system with that have the school's ID. Some times teachers,
+  	or other staff members may need to create a new classroom that does not
+  	exist in the infinite campus system. This feature allows them to do so,
+  	however there will be no students assigned by default. If you are certain
+  	you should have a roster for Flex, please contact your school's IT
+  	department.
+  </Callout>
+
+## 10/01/2024
+
+- Resolved duplicated classrooms bug.
+- Allow student status functionality on all pages, not just teacher dashboard.
+- Allow options for setting the amount of rows to display on tables.
+
+## 09/30/2024
+
+- Added fix to solve the error bug with approving requests.
+- Allow teachers to revert the student status back to default or not arrived after marking them as arrived.
